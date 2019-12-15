@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { csvParse } from 'd3'
-import Colors from 'Colors'
 import Width from 'Width'
 
+interface CSVROW { time: string, gauge: string, width: string }
 const App = () => {
-  const inital: number[][] = []
-  const [gauges, setGauges] = useState(inital)
+  const inital: CSVROW[] = []
+  const [widths, setWidths] = useState(inital)
 
   useEffect(() => {
     async function fetchData () {
@@ -13,14 +13,36 @@ const App = () => {
       const text = await res.text()
       const data: any = csvParse(text)
 
-      setGauges(data)
+      setWidths(data)
     }
     fetchData()
   }, [])
 
-  const data = gauges.map(gauge => gauge[1])
+  const data = widths.map(gauge => parseFloat(gauge.width))
 
-  return <Width data={data} />
+  return <>
+    <Width data={data} />
+    <table>
+      <thead>
+        <tr>
+          <td>#</td>
+          <td>time</td>
+          <td>gauge</td>
+          <td>width</td>
+        </tr>
+      </thead>
+      <tbody>
+        {widths.map((val, i) =>
+          <tr>
+            <td>{i}</td>
+            <td>{val.time}</td>
+            <td>{val.gauge}</td>
+            <td>{val.width}</td>
+          </tr>
+        )}
+      </tbody>
+    </table>
+  </>
 }
 
 export default App
