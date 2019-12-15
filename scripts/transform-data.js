@@ -1,5 +1,6 @@
-// this will take gauge data from heiligenhafen and calculate widths of stripes than
+// this will take gauge data from heiligenhafen and calculate widths of stripes that
 // can be used to visualize the sealevel
+// and store this to a csv file
 
 const fs = require('fs')
 const path = require('path')
