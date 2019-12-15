@@ -1,19 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { csvParse } from 'd3'
-import Dots from 'Dots'
-import Dots2 from 'Dots2'
-import Dots3 from 'Dots3'
-import Dots4 from 'Dots4'
+import Colors from 'Colors'
 
-const tz = require('timezone')
-const berlinTimeZoneDefinitions = require('timezone/Europe/Berlin')
-const berlinTime = tz(berlinTimeZoneDefinitions, 'Europe/Berlin')
-
-
-
-const App: React.FC = () => {
-  const inital: Array<{ date: string, temperature: string, windSpeed: string, rain: string, sunshine: string }> = []
-  const [temperatures, setTemperatures] = useState(inital)
+const App = () => {
+  const inital: number[][] = []
+  const [gauges, setGauges] = useState(inital)
 
   useEffect(() => {
     async function fetchData () {
@@ -21,21 +12,19 @@ const App: React.FC = () => {
       const text = await res.text()
       const data: any = csvParse(text)
 
-      setTemperatures(data)
+      setGauges(data)
     }
     fetchData()
   }, [])
 
-  const hourlyData = temperatures.map(row => ({
-    hour: +berlinTime(row.date, '%H'),
-    line: +berlinTime(row.date, '%Y') - 1992,
-    windSpeed: parseFloat(row.windSpeed),
-    rain: parseFloat(row.rain),
-    temperature: parseFloat(row.temperature),
-    sunshine: parseFloat(row.sunshine)
-  }))
+  const normalGauge = 504
+  // set to values between 0 and 1 where 0.5 is the normalGauge
+  // for the eastern see
+  const data = gauges.map(gauge => gauge[1] / (normalGauge * 2))
 
-  return <Dots hourlyData={hourlyData} />
+  console.log(data)
+
+  return <Colors data={data} />
 }
 
 export default App
