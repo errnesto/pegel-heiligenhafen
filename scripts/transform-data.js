@@ -20,7 +20,7 @@ const data = d3.range(15).reduce((agregate, idx) => {
   const dayData = parser
     .parse(dayDataString)
     // only get the values from 12:00 h
-    .filter(row => row[hourKey] === '12:00')
+    .filter(row => row[hourKey] === '12:00' || row[hourKey] === '00:01')
     .map(row => [`${hourKey} ${row[hourKey]}`, row[valueKey]])
     // .reduce((agregate, row) => {
 

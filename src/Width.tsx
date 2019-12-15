@@ -6,7 +6,7 @@ type Gauge = number
 interface Props {
   data: Gauge[]
 }
-const Colors = (props: Props) => {
+const Width = (props: Props) => {
   const { data } = props
 
   const normalGauge = 504
@@ -16,23 +16,34 @@ const Colors = (props: Props) => {
   // console.log(gauges)
   const scale = scaleLinear()
     .domain([normalGauge - offset, normalGauge + offset])
-    .range([1,0])
+    .range([0, 1])
 
   const values = data.map(value => scale(value))
 
+  interface Agregate {
+    offset: number,
+    values: number[][]
+  }
+  const withOffset = values.reduce((agregate, next) => {
+    const offset = agregate.offset
+    agregate.offset += next
+    agregate.values.push([offset, next])
+    return agregate
+  }, { offset: 0, values: [] } as Agregate)
+
   const stripeWidth = 20
   return <svg viewBox={`0 0 ${stripeWidth * data.length} 50`} width='100%' height='100%' version="1.1" xmlns="http://www.w3.org/2000/svg">
-    {values.map((val, i) => {
+    {withOffset.values.map((val, i) => {
       return <rect
         key={i}
-        x={i * stripeWidth}
+        x={val[0] * stripeWidth}
         y='0'
-        width={stripeWidth}
+        width={val[1] * stripeWidth}
         height='50'
-        fill={interpolateViridis(val)}
+        fill={i % 2 ? '#CAE300' : '#178E8E'}
         />
     })}
   </svg>
 }
 
-export default Colors
+export default Width

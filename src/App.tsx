@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { csvParse } from 'd3'
 import Colors from 'Colors'
+import Width from 'Width'
 
 const App = () => {
   const inital: number[][] = []
@@ -17,14 +18,9 @@ const App = () => {
     fetchData()
   }, [])
 
-  const normalGauge = 504
-  // set to values between 0 and 1 where 0.5 is the normalGauge
-  // for the eastern see
-  const data = gauges.map(gauge => gauge[1] / (normalGauge * 2))
+  const data = gauges.map(gauge => gauge[1])
 
-  console.log(data)
-
-  return <Colors data={data} />
+  return <Width data={data} />
 }
 
 export default App
