@@ -16,7 +16,7 @@ function pad(num, size) {
 }
 
 const parser = d3.dsvFormat(';')
-const numberOfDays = 14
+const numberOfDays = 23
 const gauges = d3.range(numberOfDays).reduce((agregate, idx) => {
   const day = idx + 1
   const num = pad(day, 2)
@@ -64,11 +64,11 @@ const normalGauge = 504 // cm over
 // our domain will be 100 cm above and below that
 const offset = 100 // cm
 
-// set to values between 0 and 6 where
-// so the average width should be 3
+// set to values between 0 and 7 where
+// so the average width should be 3.5
 const scale = d3.scaleLinear()
   .domain([normalGauge - offset, normalGauge + offset])
-  .range([0, 6])
+  .range([0, 7])
 
 const widths = gauges.map(gauge => {
   return { ...gauge, width: scale(gauge.gauge).toFixed(2)}
